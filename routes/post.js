@@ -22,7 +22,7 @@ router
 router
   .route("/api/posts/:id")
   .get(getPostById)
-  .put(authMiddleware, updatePost)
+  .put( authMiddleware, upload.single('image'), updatePost)
   .delete(authMiddleware, deletePost);
 
 export default router;

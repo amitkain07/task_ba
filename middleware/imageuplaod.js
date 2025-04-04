@@ -1,12 +1,24 @@
-import multer from "multer";
-import path from "path";
-// Multer setup for file uploads
+// middleware/multer.js
+import multer from 'multer';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import fs from 'fs';
+
+// Resolve __dirname in ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Ensure upload directory exists
+const uploadPath = path.join(__dirname, '../uploads');
+if (!fs.existsSync(uploadPath)) fs.mkdirSync(uploadPath);
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/"); // Ensure this directory exists
+    cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
+    const uniqueName = `${Date.now()}-${file.originalname}`;
+    cb(null, uniqueName);
   },
 });
 
